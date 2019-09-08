@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\andre\.Rider2019.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\andre\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_App.-1085195577.00" t="ExcludeRecursive" />
+    <e p="C:\Users\andre\Desktop\repositories\processamento-grafico" t="IncludeFlat">
+      <e p="App.sln" t="IncludeFlat" />
+      <e p="Debug" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="src" t="IncludeRecursive">
+        <e p="App.cpp" t="Include" />
+        <e p="App.vcxproj" t="IncludeRecursive" />
+        <e p="Debug" t="ExcludeRecursive" />
+      </e>
+    </e>
+  </component>
+</project>

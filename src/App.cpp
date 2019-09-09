@@ -148,9 +148,14 @@ int main() {
 	// create the vertex position data
 	// this value could be made dynamic by polling user input
 	GLfloat vertices[] = {
-		-0.5f, -0.5f, 0.0f, // Left  
-		0.5f, -0.5f, 0.0f, // Right 
-		0.0f,  0.5f, 0.0f,  // Top
+	    // triangulo esquerdo
+		-1.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f, 
+		-0.5f,  0.0f, 0.0f,
+        // triangulo direito
+		1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 
+		0.5f,  0.0f, 0.0f,  
 	};
 	
 	// generate vertex array and vertex buffer objects

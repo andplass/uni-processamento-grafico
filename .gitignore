@@ -1,2 +1,6 @@
 debug/*
+debug/App.*
+
 src/Debug/*
+src/Debug/App.*
+src/Debug/vc142.*

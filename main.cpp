@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <gl/GL.h>
+#include <cmath>
 
 // Set window dimensions
 const GLint WIDTH = 800, HEIGHT = 600;
+const float PI = 3.14159;
 
 GLuint VAO, VBO, shaderProgram;
 
@@ -16,10 +20,10 @@ static const char* vertexShader = "                                           \n
 layout (location = 0) in vec3 pos;											  \n\
                                                                               \n\
 void main() {                                                                 \n\
-    gl_Position = vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);				  \n\
+    gl_Position = vec4(0.4 * pos.x, 0.4 * pos.y, 0.0, 1.0);				      \n\
 }";
 // Fragment shader program
-static const char* fragmentShader = "                                                \n\
+static const char* fragmentShader = "                                         \n\
 #version 330                                                                  \n\
                                                                               \n\
 out vec4 colour;                                                              \n\
@@ -29,11 +33,21 @@ void main() {                                                                 \n
 }";
 
 void createTriangle() {
-    GLfloat vertices[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f
-    };
+	GLfloat vertices[90]; // 45 vertices
+	GLfloat posX[45];
+	GLfloat posY[45];
+
+	float radius = 1.0f;
+
+	for (int i = 0; i < 45; i++) {
+		posX[i] = radius * cos((PI * 2 * i) / 45);
+		posY[i] = radius * sin((PI * 2 * i) / 45);
+	}
+
+	for (int i = 0; i < 45; i++) {
+		vertices[i * 2] = posX[i];
+		vertices[(i * 2) + 1] = posY[i];
+	}
 
     // Create VAO and set it to current buffer context
     glGenVertexArrays(1, &VAO);
@@ -47,7 +61,7 @@ void createTriangle() {
 
     // Configure vertex shader program attributes
     // Selects location = 0 shaderProgram
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
     // Enable usage of vertex with location = 0
     glEnableVertexAttribArray(0);
 
@@ -186,7 +200,7 @@ int main() {
         glBindVertexArray(VAO);
 
         // (what we want to draw, array offset, array stride --#vertices to read)
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 45);
 
         // Unassign vertex array;
         glBindVertexArray(0);

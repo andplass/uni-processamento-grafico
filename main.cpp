@@ -9,30 +9,29 @@ const GLint WIDTH = 800, HEIGHT = 600;
 
 GLuint VAO, VBO, shaderProgram;
 
-// Vertex shader program
-static const char* vertexShader = "                                           \n\
-#version 330                                                                  \n\
-                                                                              \n\
-layout (location = 0) in vec3 pos;											  \n\
-                                                                              \n\
-void main() {                                                                 \n\
-    gl_Position = vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);				  \n\
-}";
-// Fragment shader program
-static const char* fragmentShader = "                                                \n\
-#version 330                                                                  \n\
-                                                                              \n\
-out vec4 colour;                                                              \n\
-                                                                              \n\
-void main() {                                                                 \n\
-    colour = vec4(1.0, 0.0, 0.0, 1.0);                                        \n\
-}";
+const GLchar* vertexShader = "#version 410\n"
+"layout (location = 0) in vec3 position;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec3 ourColor;\n"
+"void main()\n"
+"{\n"
+"gl_Position = vec4(position.x, position.y, position.z, 1.0);\n"
+"   ourColor = aColor;\n"
+"}\0";
+const GLchar* fragmentShader = "#version 410\n"
+"out vec4 FragColor;\n"
+"in vec3 ourColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(ourColor, 1.0f);\n"
+"}\n\0";
+
 
 void createTriangle() {
     GLfloat vertices[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f
+        -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f
     };
 
     // Create VAO and set it to current buffer context
@@ -47,12 +46,17 @@ void createTriangle() {
 
     // Configure vertex shader program attributes
     // Selects location = 0 shaderProgram
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
     // Enable usage of vertex with location = 0
     glEnableVertexAttribArray(0);
 
+    // Selects location = 1 shaderProgram
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    // Enable usage of vertex with location = 0
+    glEnableVertexAttribArray(1);
+
     // Unbind buffer from context
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     // Unbind vertex array
     glBindVertexArray(0);

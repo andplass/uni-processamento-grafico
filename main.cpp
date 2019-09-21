@@ -30,10 +30,15 @@ void main() {                                                                 \n
 
 void createTriangle() {
     GLfloat vertices[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f
-    };
+	    // triangulo esquerdo
+		-1.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		-0.5f,  0.0f, 0.0f,
+        // triangulo direito
+		1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.5f,  0.0f, 0.0f,
+	};
 
     // Create VAO and set it to current buffer context
     glGenVertexArrays(1, &VAO);
@@ -186,7 +191,7 @@ int main() {
         glBindVertexArray(VAO);
 
         // (what we want to draw, array offset, array stride --#vertices to read)
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // Unassign vertex array;
         glBindVertexArray(0);

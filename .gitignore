@@ -1,6 +1,3 @@
-debug/*
-debug/App.*
-
-src/Debug/*
-src/Debug/App.*
-src/Debug/vc142.*
+.idea/
+.vs/
+cmake-build-debug/

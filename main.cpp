@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include "shader.h"
 
 // Set window dimensions
@@ -87,7 +90,8 @@ int initGLFW() {
 
 int main() {
 
-	if (initGLFW()) {
+	if (!initGLFW()) {
+		printf("Failed to initialize GLFW window");
 		return 1;
 	}
 
@@ -108,7 +112,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
         // Set current shader program
-		//ourShader.use();
+		ourShader.use();
         // Set current vertex array
         glBindVertexArray(VAO);
 

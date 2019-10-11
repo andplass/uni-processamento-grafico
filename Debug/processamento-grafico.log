@@ -1,2 +1,2 @@
 ﻿  main.cpp
-  processamento-grafico.vcxproj -> C:\Users\andpl\Desktop\repos-local\uni-processamento-grafico\Debug\processamento-grafico.exe
+C:\Users\andpl\Desktop\repos-local\uni-processamento-grafico\libs\GLAD\include\glad\glad.h(26,1): error C1189:  #error:  OpenGL header already included, remove this include, glad already provides it

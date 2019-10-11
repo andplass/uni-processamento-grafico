@@ -1,37 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "shader.h"
 
 // Set window dimensions
 const GLint WIDTH = 800, HEIGHT = 600;
+GLFWwindow* MAIN_WINDOW;
 
 GLuint VAO, VBO, shaderProgram;
-
-// Vertex shader program
-static const char* vertexShader = "                                           \n\
-#version 410                                                                  \n\
-                                                                              \n\
-layout (location = 0) in vec2 pos;											  \n\
-layout (location = 1) in vec3 color_in;										  \n\
-																			  \n\
-out vec3 color_frag;														  \n\
-                                                                              \n\
-void main() {                                                                 \n\
-    gl_Position = vec4(pos.x, pos.y, 0.0, 1.0);							      \n\
-	color_frag = color_in;													  \n\
-}";
-// Fragment shader program
-static const char* fragmentShader = "                                         \n\
-#version 410                                                                  \n\
-                                                                              \n\
-in vec3 color_frag;															  \n\
-out vec4 color_out;                                                           \n\
-                                                                              \n\
-void main() {                                                                 \n\
-    color_out = vec4(color_frag, 1.0);                                        \n\
-}";
 
 void createTriangle() {
     GLfloat vertices[] = {
@@ -63,68 +39,7 @@ void createTriangle() {
     glBindVertexArray(0);
 }
 
-void addShader(GLuint shaderProgram, const char* shaderCode, GLenum shaderType) {
-    GLuint shader = glCreateShader(shaderType);
-
-    const GLchar* GLcode[1];
-    GLcode[0] = shaderCode;
-
-    GLint codeLength[1];
-    codeLength[0] = strlen(shaderCode);
-
-    // (shader, amount of strings to join in one code, code itself, length)
-    glShaderSource(shader, 1, GLcode, codeLength);
-    glCompileShader(shader);
-
-    GLint result = 0;
-    GLchar errorLog[1024] = { 0 };
-
-    // Throw error if compilation fails
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-    if (!result) {
-        glGetShaderInfoLog(shader, sizeof(errorLog), NULL, errorLog);
-        printf("Error compiling the %d shader program: '%s' \n", shaderType, errorLog);
-        return;
-    }
-
-    glAttachShader(shaderProgram, shader);
-}
-
-void compileShaders() {
-    shaderProgram = glCreateProgram();
-    if (!shaderProgram) {
-        printf("Error creating shader program!\n");
-        return;
-    }
-
-    addShader(shaderProgram, vertexShader, GL_VERTEX_SHADER);
-    addShader(shaderProgram, fragmentShader, GL_FRAGMENT_SHADER);
-
-    GLint result = 0;
-    GLchar errorLog[1024] = { 0 };
-
-    // Creates executables in the graphics card
-    glLinkProgram(shaderProgram);
-    // Throw error if linker fails
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &result);
-    if (!result) {
-        glGetProgramInfoLog(shaderProgram, sizeof(errorLog), NULL, errorLog);
-        printf("Error linking program: '%s'\n", errorLog);
-        return;
-    }
-
-    // Throw error if shader program is not valid
-    glValidateProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &result);
-    if (!result) {
-        glGetProgramInfoLog(shaderProgram, sizeof(errorLog), NULL, errorLog);
-        printf("Error validating program: '%s'\n", errorLog);
-        return;
-    }
-}
-
-int main() {
-
+int initGLFW() {
 	// Initialize GLFW
 	if (!glfwInit()) { // throws error if failed
 		printf("GLFW initialization failed!");
@@ -142,8 +57,8 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create the window
-	GLFWwindow* mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "processamento-grafico", NULL, NULL);
-	if (!mainWindow) { // throws error if failed
+	MAIN_WINDOW = glfwCreateWindow(WIDTH, HEIGHT, "processamento-grafico", NULL, NULL);
+	if (!MAIN_WINDOW) { // throws error if failed
 		printf("GLFW window creation failed!");
 		glfwTerminate();
 		return 1;
@@ -151,32 +66,39 @@ int main() {
 
 	// Get buffer size information from the created window
 	int bufferWidth, bufferHeight;
-	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
+	glfwGetFramebufferSize(MAIN_WINDOW, &bufferWidth, &bufferHeight);
 
 	// Set the context for GLEW to use
-	glfwMakeContextCurrent(mainWindow);
+	glfwMakeContextCurrent(MAIN_WINDOW);
 
 	// Allow modern extension features
 	glewExperimental = GL_TRUE;
 
-
 	if (glewInit() != GLEW_OK) {
 		printf("GLEW initialization failed");
-		glfwDestroyWindow(mainWindow);
+		glfwDestroyWindow(MAIN_WINDOW);
 		glfwTerminate();
 		return 1;
 	}
 
 	// Setup viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
+}
+
+int main() {
+
+	if (initGLFW()) {
+		return 1;
+	}
 
 	// Creates a VAO holding triangle data
 	createTriangle();
+
 	// Creates and sets the shader program id to a global variable
-	compileShaders();
+	Shader ourShader("shaders/shader.vs", "shaders/shader.fs");
 
 	// Loop until window closed
-	while (!glfwWindowShouldClose(mainWindow)) {
+	while (!glfwWindowShouldClose(MAIN_WINDOW)) {
 		// Get and handle user input events
 		glfwPollEvents();
 
@@ -186,7 +108,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
         // Set current shader program
-        glUseProgram(shaderProgram);
+		//ourShader.use();
         // Set current vertex array
         glBindVertexArray(VAO);
 
@@ -198,7 +120,7 @@ int main() {
         // Unassign shader after using it
         glUseProgram(0);
 
-		glfwSwapBuffers(mainWindow);
+		glfwSwapBuffers(MAIN_WINDOW);
 	}
 
 	return 0;

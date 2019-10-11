@@ -7,7 +7,15 @@
 // Set window dimensions
 const GLint WIDTH = 800, HEIGHT = 600;
 
-GLuint VAO, VBO, shaderProgram;
+GLuint shaderProgram;;
+GLuint VAO_ROOF, VBO_ROOF;
+GLuint VAO_FLOOR, VBO_FLOOR;
+GLuint VAO_LEFT_WALL, VBO_LEFT_WALL;
+GLuint VAO_RIGHT_WALL, VBO_RIGHT_WALL;
+GLuint VAO_DOOR, VBO_DOOR;
+GLuint VAO_WINDOW, VBO_WINDOW;
+GLuint VAO_WINDOW_HORIZONTAL, VBO_WINDOW_HORIZONTAL;
+GLuint VAO_WINDOW_VERTICAL, VBO_WINDOW_VERTICAL;
 
 // Vertex shader program
 static const char* vertexShader = "                                           \n\
@@ -33,20 +41,229 @@ void main() {                                                                 \n
     color_out = vec4(color_frag, 1.0);                                        \n\
 }";
 
-void createTriangle() {
+
+void createWindowVertical() {
+	GLfloat vertices[] = {
+		-0.3f, -0.3f, 0.0f, 0.0f, 0.0f,
+		-0.3f, -0.55f, 0.0f, 0.0f, 0.0f
+	};
+
+	// Create VAO and set it to current buffer context
+	glGenVertexArrays(1, &VAO_WINDOW_VERTICAL);
+	glBindVertexArray(VAO_WINDOW_VERTICAL);
+
+	// Create VBO
+	glGenBuffers(1, &VBO_WINDOW_VERTICAL);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_WINDOW_VERTICAL);
+	// Reserves memory for the array
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Configure vertex shader program attributes
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind buffer from context
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Unbind vertex array
+	glBindVertexArray(0);
+}
+
+void createWindowHorizontal() {
+	GLfloat vertices[] = {
+		-0.4f, -0.425f, 0.0f, 0.0f, 0.0f,
+		-0.2f, -0.425f, 0.0f, 0.0f, 0.0f
+	};
+
+	// Create VAO and set it to current buffer context
+	glGenVertexArrays(1, &VAO_WINDOW_HORIZONTAL);
+	glBindVertexArray(VAO_WINDOW_HORIZONTAL);
+
+	// Create VBO
+	glGenBuffers(1, &VBO_WINDOW_HORIZONTAL);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_WINDOW_HORIZONTAL);
+	// Reserves memory for the array
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Configure vertex shader program attributes
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind buffer from context
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Unbind vertex array
+	glBindVertexArray(0);
+}
+
+void createWindow() {
+	GLfloat vertices[] = {
+		-0.4f, -0.3f, 1.0f, 1.0f, 0.0f,
+		-0.4f, -0.55f, 1.0f, 1.0f, 0.0f,
+		-0.2f, -0.55f, 1.0f, 1.0f, 0.0f,
+		-0.2f, -0.3f, 1.0f, 1.0f, 0.0f
+	};
+
+	// Create VAO and set it to current buffer context
+	glGenVertexArrays(1, &VAO_WINDOW);
+	glBindVertexArray(VAO_WINDOW);
+
+	// Create VBO
+	glGenBuffers(1, &VBO_WINDOW);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_WINDOW);
+	// Reserves memory for the array
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Configure vertex shader program attributes
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind buffer from context
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Unbind vertex array
+	glBindVertexArray(0);
+}
+
+void createDoor() {
+	GLfloat vertices[] = {
+		-0.1f, -0.9f, 0.5f, 0.2f, 0.1f,
+		-0.1f, -0.5f, 0.5f, 0.2f, 0.1f,
+		0.1f, -0.5f, 0.5f, 0.2f, 0.1f,
+		0.1f, -0.9f, 0.5f, 0.2f, 0.1f
+	};
+
+	// Create VAO and set it to current buffer context
+	glGenVertexArrays(1, &VAO_DOOR);
+	glBindVertexArray(VAO_DOOR);
+
+	// Create VBO
+	glGenBuffers(1, &VBO_DOOR);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_DOOR);
+	// Reserves memory for the array
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Configure vertex shader program attributes
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind buffer from context
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Unbind vertex array
+	glBindVertexArray(0);
+}
+
+void createLeftWall() {
+	GLfloat vertices[] = {
+		-0.5f, -0.9f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 0.0f, 0.0f, 0.0f, 0.0f
+	};
+
+	// Create VAO and set it to current buffer context
+	glGenVertexArrays(1, &VAO_LEFT_WALL);
+	glBindVertexArray(VAO_LEFT_WALL);
+
+	// Create VBO
+	glGenBuffers(1, &VBO_LEFT_WALL);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_LEFT_WALL);
+	// Reserves memory for the array
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Configure vertex shader program attributes
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind buffer from context
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Unbind vertex array
+	glBindVertexArray(0);
+}
+
+void createRightWall() {
+	GLfloat vertices[] = {
+		0.5f, -0.9f, 0.0f, 0.0f, 0.0f,
+		0.5f, 0.0f, 0.0f, 0.0f, 0.0f
+	};
+
+	// Create VAO and set it to current buffer context
+	glGenVertexArrays(1, &VAO_RIGHT_WALL);
+	glBindVertexArray(VAO_RIGHT_WALL);
+
+	// Create VBO
+	glGenBuffers(1, &VBO_RIGHT_WALL);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_RIGHT_WALL);
+	// Reserves memory for the array
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Configure vertex shader program attributes
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind buffer from context
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Unbind vertex array
+	glBindVertexArray(0);
+}
+
+void createFloor() {
+	GLfloat vertices[] = {
+		// floor
+		-1.0f, -0.9f, 1.0f, 0.2f, 0.0f,
+		1.0f, -0.9f, 1.0f, 0.2f, 0.0f
+	};
+
+	// Create VAO and set it to current buffer context
+	glGenVertexArrays(1, &VAO_FLOOR);
+	glBindVertexArray(VAO_FLOOR);
+
+	// Create VBO
+	glGenBuffers(1, &VBO_FLOOR);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_FLOOR);
+	// Reserves memory for the array
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Configure vertex shader program attributes
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	// Unbind buffer from context
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Unbind vertex array
+	glBindVertexArray(0);
+}
+
+void createRoof() {
     GLfloat vertices[] = {
-        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.75f, 1.0f, 0.0f, 0.0f,
+        0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
     };
 
     // Create VAO and set it to current buffer context
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    glGenVertexArrays(1, &VAO_ROOF);
+    glBindVertexArray(VAO_ROOF);
 
     // Create VBO
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glGenBuffers(1, &VBO_ROOF);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_ROOF);
     // Reserves memory for the array
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -170,8 +387,16 @@ int main() {
 	// Setup viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
-	// Creates a VAO holding triangle data
-	createTriangle();
+	// Create VAOs holding data
+	createRoof();
+	createFloor();
+	createLeftWall();
+	createRightWall();
+	createDoor();
+	createWindow();
+	createWindowHorizontal();
+	createWindowVertical();
+
 	// Creates and sets the shader program id to a global variable
 	compileShaders();
 
@@ -188,10 +413,38 @@ int main() {
         // Set current shader program
         glUseProgram(shaderProgram);
         // Set current vertex array
-        glBindVertexArray(VAO);
 
-        // (what we want to draw, array offset, array stride --#vertices to read)
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+		// Draw roof
+		glBindVertexArray(VAO_ROOF);
+        glDrawArrays(GL_TRIANGLES, 0, 3); // (what we want to draw, array offset, array stride --#vertices to read
+
+		// Draw floor
+		glBindVertexArray(VAO_FLOOR);
+		glDrawArrays(GL_LINES, 0, 2);
+
+		// Draw left wall
+		glBindVertexArray(VAO_LEFT_WALL);
+		glDrawArrays(GL_LINES, 0, 2);
+
+		// Draw right wall
+		glBindVertexArray(VAO_RIGHT_WALL);
+		glDrawArrays(GL_LINES, 0, 2);
+
+		// Draw door
+		glBindVertexArray(VAO_DOOR);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		// Draw window
+		glBindVertexArray(VAO_WINDOW);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		// Draw window horizontal
+		glBindVertexArray(VAO_WINDOW_HORIZONTAL);
+		glDrawArrays(GL_LINES, 0, 2);
+
+		// Draw window vertical
+		glBindVertexArray(VAO_WINDOW_VERTICAL);
+		glDrawArrays(GL_LINES, 0, 2);
 
         // Unassign vertex array;
         glBindVertexArray(0);

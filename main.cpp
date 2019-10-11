@@ -11,28 +11,33 @@ GLuint VAO, VBO, shaderProgram;
 
 // Vertex shader program
 static const char* vertexShader = "                                           \n\
-#version 330                                                                  \n\
+#version 410                                                                  \n\
                                                                               \n\
-layout (location = 0) in vec3 pos;											  \n\
+layout (location = 0) in vec2 pos;											  \n\
+layout (location = 1) in vec3 color_in;										  \n\
+																			  \n\
+out vec3 color_frag;														  \n\
                                                                               \n\
 void main() {                                                                 \n\
-    gl_Position = vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);				  \n\
+    gl_Position = vec4(pos.x, pos.y, 0.0, 1.0);							      \n\
+	color_frag = color_in;													  \n\
 }";
 // Fragment shader program
-static const char* fragmentShader = "                                                \n\
-#version 330                                                                  \n\
+static const char* fragmentShader = "                                         \n\
+#version 410                                                                  \n\
                                                                               \n\
-out vec4 colour;                                                              \n\
+in vec3 color_frag;															  \n\
+out vec4 color_out;                                                           \n\
                                                                               \n\
 void main() {                                                                 \n\
-    colour = vec4(1.0, 0.0, 0.0, 1.0);                                        \n\
+    color_out = vec4(color_frag, 1.0);                                        \n\
 }";
 
 void createTriangle() {
     GLfloat vertices[] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f
+        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
     };
 
     // Create VAO and set it to current buffer context
@@ -46,10 +51,10 @@ void createTriangle() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Configure vertex shader program attributes
-    // Selects location = 0 shaderProgram
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    // Enable usage of vertex with location = 0
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GLfloat)));
     glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 
     // Unbind buffer from context
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -176,7 +181,7 @@ int main() {
 		glfwPollEvents();
 
 		// Clear the window
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		// Clear only the color (there is more data that can be cleared --like depth)
 		glClear(GL_COLOR_BUFFER_BIT);
 

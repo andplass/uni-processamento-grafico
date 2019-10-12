@@ -140,7 +140,7 @@ int main()
 	
 		//corrigindo o aspecto
 		float ratio;
-		float xMin = -10.0, xMax = 10.0, yMin = -10.0, yMax = 10.0;
+		float xMin = 0.0, xMax = 800.0, yMin = 600.0, yMax = 0.0;
 		float zNear = 0.1, zFar = 1.0;
 		if (width >= height)
 		{

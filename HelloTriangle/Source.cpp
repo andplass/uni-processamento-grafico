@@ -35,7 +35,36 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
+GLuint VAO_TRIANGULO_1, VBO_TRIANGULO_1;
 
+
+void createTriangle1() {
+	GLfloat vertices[] = {
+		// Positions          // Colors           
+		537.5f,  300.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		802.25f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		1067.5f, 300.0f, 0.0f,   1.0f, 0.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &VAO_TRIANGULO_1);
+	glGenBuffers(1, &VBO_TRIANGULO_1);
+
+
+	glBindVertexArray(VAO_TRIANGULO_1);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_TRIANGULO_1);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+}
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -70,43 +99,8 @@ int main()
 	// Build and compile our shader program
 	Shader ourShader("../shaders/transformations.vs", "../shaders/transformations.frag");
 
-	// Set up vertex data (and buffer(s)) and attribute pointers
-	GLfloat vertices[] = {
-		// Positions          // Colors           
-		300.0f,  200.0f, 0.0f,   1.0f, 0.0f, 0.0f,    // Top Right
-		300.0f, 400.0f, 0.0f,   0.0f, 1.0f, 0.0f,    // Bottom Right
-		600.0f, 400.0f, 0.0f,   0.0f, 0.0f, 1.0f,   // Bottom Left
-		600.0f, 200.0f, 0.0f,   1.0f, 1.0f, 0.0f,   // Top Left 
-	};
-	GLuint indices[] = {  // Note that we start from 0!
-		0, 1, 3, // First Triangle
-		1, 2, 3  // Second Triangle
-	};
-
-	GLuint VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	
-	
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	// Color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-
-	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
-
+	// Setup buffers
+	createTriangle1();
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -132,11 +126,11 @@ int main()
 		glm::mat4 view;
 		glm::mat4 ortho;
 		
-		//model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(400.0f, 300.0f, 1.0f));
+		//model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 		
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
 				
-		ortho = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
+		//ortho = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 	
 		//corrigindo o aspecto
 		float ratio;
@@ -164,17 +158,17 @@ int main()
 		// matrix rarely changes it's often best practice to set it outside the main loop only once.
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(ortho));
 
-		// Draw container
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		// Draw
+		glBindVertexArray(VAO_TRIANGULO_1);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}
 	// Properly de-allocate all resources once they've outlived their purpose
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &VAO_TRIANGULO_1);
+	glDeleteBuffers(1, &VBO_TRIANGULO_1);
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();
 	return 0;

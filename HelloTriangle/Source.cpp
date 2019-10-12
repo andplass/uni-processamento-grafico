@@ -73,10 +73,10 @@ int main()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] = {
 		// Positions          // Colors           
-		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,    // Top Right
-		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,    // Bottom Right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   // Bottom Left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   // Top Left 
+		300.0f,  200.0f, 0.0f,   1.0f, 0.0f, 0.0f,    // Top Right
+		300.0f, 400.0f, 0.0f,   0.0f, 1.0f, 0.0f,    // Bottom Right
+		600.0f, 400.0f, 0.0f,   0.0f, 0.0f, 1.0f,   // Bottom Left
+		600.0f, 200.0f, 0.0f,   1.0f, 1.0f, 0.0f,   // Top Left 
 	};
 	GLuint indices[] = {  // Note that we start from 0!
 		0, 1, 3, // First Triangle
@@ -132,7 +132,7 @@ int main()
 		glm::mat4 view;
 		glm::mat4 ortho;
 		
-		model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(400.0f, 300.0f, 1.0f));
 		
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
 				

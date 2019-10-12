@@ -36,14 +36,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 // Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
 GLuint VAO_TRIANGULO_1, VBO_TRIANGULO_1;
-
+GLuint VAO_TRIANGULO_2, VBO_TRIANGULO_2;
+GLuint VAO_TRIANGULO_3, VBO_TRIANGULO_3;
+GLuint VAO_TRIANGULO_4, VBO_TRIANGULO_4;
 
 void createTriangle1() {
 	GLfloat vertices[] = {
 		// Positions          // Colors           
-		537.5f,  300.0f, 0.0f,   1.0f, 0.0f, 0.0f,
-		802.25f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
-		1067.5f, 300.0f, 0.0f,   1.0f, 0.0f, 0.0f
+		-1.0f,  0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		-0.5f, 1.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f
 	};
 
 	glGenVertexArrays(1, &VAO_TRIANGULO_1);
@@ -52,6 +54,90 @@ void createTriangle1() {
 
 	glBindVertexArray(VAO_TRIANGULO_1);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_TRIANGULO_1);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+}
+
+void createTriangle2() {
+	GLfloat vertices[] = {
+		// Positions          // Colors           
+		0.0f,  0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		0.5f, 1.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &VAO_TRIANGULO_2);
+	glGenBuffers(1, &VBO_TRIANGULO_2);
+
+
+	glBindVertexArray(VAO_TRIANGULO_2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_TRIANGULO_2);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+}
+
+void createTriangle3() {
+	GLfloat vertices[] = {
+		// Positions          // Colors           
+		-1.0f, -1.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		-0.5f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,   1.0f, 0.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &VAO_TRIANGULO_3);
+	glGenBuffers(1, &VBO_TRIANGULO_3);
+
+
+	glBindVertexArray(VAO_TRIANGULO_3);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_TRIANGULO_3);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+}
+
+void createTriangle4() {
+	GLfloat vertices[] = {
+		// Positions          // Colors           
+		0.0f,  -1.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		0.5f, -0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,   1.0f, 0.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &VAO_TRIANGULO_4);
+	glGenBuffers(1, &VBO_TRIANGULO_4);
+
+
+	glBindVertexArray(VAO_TRIANGULO_4);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_TRIANGULO_4);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -101,6 +187,9 @@ int main()
 
 	// Setup buffers
 	createTriangle1();
+	createTriangle2();
+	createTriangle3();
+	createTriangle4();
 
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -130,22 +219,7 @@ int main()
 		
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
 				
-		//ortho = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
-	
-		//corrigindo o aspecto
-		float ratio;
-		float xMin = 0.0, xMax = 800.0, yMin = 600.0, yMax = 0.0;
-		float zNear = 0.1, zFar = 1.0;
-		if (width >= height)
-		{
-			ratio = width / (float)height;
-			ortho =  glm::ortho(xMin*ratio, xMax*ratio, yMin, yMax,zNear,zFar);
-		}
-		else
-		{
-			ratio = height / (float)width;
-			ortho =  glm::ortho(xMin, xMax, yMin*ratio, yMax*ratio, zNear, zFar);
-		}
+		ortho = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 
 		// Get their uniform location
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
@@ -161,14 +235,23 @@ int main()
 		// Draw
 		glBindVertexArray(VAO_TRIANGULO_1);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
+
+		glBindVertexArray(VAO_TRIANGULO_2);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindVertexArray(VAO_TRIANGULO_3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindVertexArray(VAO_TRIANGULO_4);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}
+	glBindVertexArray(0);
 	// Properly de-allocate all resources once they've outlived their purpose
-	glDeleteVertexArrays(1, &VAO_TRIANGULO_1);
-	glDeleteBuffers(1, &VBO_TRIANGULO_1);
+	glDeleteVertexArrays(1, &VAO_TRIANGULO_2);
+	glDeleteBuffers(1, &VBO_TRIANGULO_2);
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();
 	return 0;
